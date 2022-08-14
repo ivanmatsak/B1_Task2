@@ -10,16 +10,15 @@ import java.sql.*;
 import java.util.Iterator;
 
 public class ExcelConnector {
-    public static void download(){
 
-    }
-    public void connectAndImport(String table) {
+    public void connectAndImport(String table) {//Метод, который подключается и загружает данные из Excel в бд
         String jdbcURL = "jdbc:mysql://localhost:3306/b1db";
         String username = "root";
         String password = "1234";
 
         String excelFilePath = "C:/Курс 3/Тестовые задания/B1_2_v2/gs-rest-service/complete/src/main/resources/Книга" +
-                table.substring(5, table.length()) + ".xlsx";
+                table.substring(5, table.length()) + ".xlsx";//В зависимости от названия таблицы, к которой обращаются,
+        // открывается нужная книга Excel
 
         int batchSize = 20;
 
@@ -30,37 +29,39 @@ public class ExcelConnector {
 
             FileInputStream inputStream = new FileInputStream(excelFilePath);
 
-            Workbook workbook = new XSSFWorkbook(inputStream);
+            Workbook workbook = new XSSFWorkbook(inputStream);//Объект книги
 
-            Sheet firstSheet = workbook.getSheetAt(0);
+            Sheet firstSheet = workbook.getSheetAt(0);//Объект первого листа книги
             Iterator<Row> rowIterator = firstSheet.iterator();
 
-            connection = DriverManager.getConnection(jdbcURL, username, password);
+            connection = DriverManager.getConnection(jdbcURL, username, password);//Подключаемся к бд
             connection.setAutoCommit(false);
             Statement deleteTableStatement = connection.createStatement();
-            String deleteTableData = "TRUNCATE TABLE " + table;
+            String deleteTableData = "TRUNCATE TABLE " + table;//Очищаем таблицу бд
             deleteTableStatement.executeUpdate(deleteTableData);
-            String sql = "INSERT INTO " + table + " VALUES (?, ?, ?, ?, ?, ?, ?)";
+            String sql = "INSERT INTO " + table + " VALUES (?, ?, ?, ?, ?, ?, ?)";//Sql запрос вставки данных
             PreparedStatement statement = connection.prepareStatement(sql);
 
             int count = 0;
             for (int i = 0; i < 9; i++) {
-                rowIterator.next(); // skip the header row
+                rowIterator.next(); // пропускаем первые строки excel документа
             }
 
 
-            while (rowIterator.hasNext()) {
+            while (rowIterator.hasNext()) {//Пока в документе есть непустые ряды, выполняем действия
                 Row nextRow = rowIterator.next();
-                Iterator<Cell> cellIterator = nextRow.cellIterator();
+                Iterator<Cell> cellIterator = nextRow.cellIterator();//Объект итератор по колонкам
 
-                while (cellIterator.hasNext()) {
+                while (cellIterator.hasNext()) {//Пока есть колонки выполняе действия
                     Cell nextCell = cellIterator.next();
 
                     int columnIndex = nextCell.getColumnIndex();
 
-                    switch (columnIndex) {
+                    switch (columnIndex) {//В зависимости от номера колонки(первые семь) считываем значение в нужную
+                        // переменную и подставляем в sql запрос
                         case 0:
-                            if (nextCell.getCellType() == CellType.STRING) {
+                            if (nextCell.getCellType() == CellType.STRING) {//В первой колонке встречаются как
+                                // текстовые так и цифровые значения
                                 String one = nextCell.getStringCellValue();
                                 statement.setString(1, one);
                             } else {
@@ -97,17 +98,17 @@ public class ExcelConnector {
 
                 }
 
-                statement.addBatch();
+                statement.addBatch();//В заготовленный sql запрос добавляем переданные ранее данные из колонок
 
                 if (count % batchSize == 0) {
-                    statement.executeBatch();
+                    statement.executeBatch();//Выполняем запрос
                 }
 
             }
-
+            //Закрываем excel документ и соединение к бд
             workbook.close();
 
-            statement.executeBatch();
+            statement.executeBatch();//Выполняем запрос
 
             connection.commit();
             connection.close();

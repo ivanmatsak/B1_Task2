@@ -19,17 +19,19 @@ import java.sql.SQLException;
 import java.util.List;
 
 @org.springframework.stereotype.Controller
-public class ExcelToDatabaseController {
+public class ExcelToDatabaseController {//Класс контроллера, который обрабатывает url запросы
     @Autowired
-    private DatabaseStringService databaseStringService;
+    private DatabaseStringService databaseStringService;//Объект сервиса для предоставления таблицы бд
 
-    @RequestMapping(value = "/download", method = RequestMethod.GET)
+    @RequestMapping(value = "/download", method = RequestMethod.GET)//Метод для обработки запросов о скачивании файла
     public ResponseEntity<Resource> downloadFile(@RequestParam(value = "id") Long id) throws SQLException, IOException {
-        Path path = Paths.get(FileLoader.getUrl(id));
+        Path path = Paths.get(FileLoader.getUrl(id));//Метод getUrl класса FileLoader создает файл с нужной таблицей
+        // и возвращает его путь
         ByteArrayResource resource = new ByteArrayResource(Files.readAllBytes(path));
         File file = new File(FileLoader.getUrl(id));
         HttpHeaders headers = new HttpHeaders(); headers.add(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename="+file.getName()+".txt");
-        return ResponseEntity.ok()
+        return ResponseEntity.ok()//При обращении к /download копируется id страницы на которой была нажата кнопка и
+                // начнется загрузка нужного файла
                 .headers(headers)
                 .contentLength(file.length())
                 .contentType(MediaType.APPLICATION_OCTET_STREAM)
@@ -37,15 +39,15 @@ public class ExcelToDatabaseController {
     }
 
     @GetMapping("/class1")
-    public ModelAndView getClass1() {
+    public ModelAndView getClass1() {//Метод выполняет get запрос /class1
         ModelAndView modelAndView = new ModelAndView();
-        List<DatabaseString> strings = databaseStringService.getClass1Database();
+        List<DatabaseString> strings = databaseStringService.getClass1Database();//Получение данных из бд
         modelAndView.setViewName("class1Template");
-        modelAndView.addObject("strings", strings);
-        modelAndView.addObject("id", 1);
+        modelAndView.addObject("strings", strings);//Передаем в html страничку список строк таблицы
+        modelAndView.addObject("id", 1);//И id выбранной таблицы
         return modelAndView;
     }
-
+    //Остальные методы работают аналогично
     @GetMapping("/class2")
     public ModelAndView getClass2() {
         ModelAndView modelAndView = new ModelAndView();

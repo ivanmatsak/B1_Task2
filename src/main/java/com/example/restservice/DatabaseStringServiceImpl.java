@@ -6,11 +6,12 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 @Service
-public class DatabaseStringServiceImpl implements DatabaseStringService{
+public class DatabaseStringServiceImpl implements DatabaseStringService{//Реализация интерфейса сервиса
 
     @Autowired
-    private DatabaseStringRepository databaseStringRepository;
+    private DatabaseStringRepository databaseStringRepository;//Объект репозитория
 
+    //Методы для получения таблицы( импортированной в бд из Excel)
     @Override
     public List<DatabaseString> getClass1Database() {
         return databaseStringRepository.getClass1Strings("class1");

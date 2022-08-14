@@ -8,14 +8,15 @@ import java.math.BigDecimal;
 import java.sql.*;
 
 public class FileLoader {
-    public static String getUrl(Long id) throws SQLException, IOException {
+    public static String getUrl(Long id) throws SQLException, IOException {//При нажатии ссылки download тот метод
+        // создаст файл, в котором будут содержаться данные из той странички, на которой была нажата ссылка.
         String jdbcURL = "jdbc:mysql://localhost:3306/b1db";
         String username = "root";
         String password = "1234";
 
         Connection connection = DriverManager.getConnection(jdbcURL, username, password);
         Statement statement = connection.createStatement();
-        String sql = "select * from class"+id;
+        String sql = "select * from class"+id;//В зависимости от id страницы, будет выбрана нужная таблица
         ResultSet resultSet = statement.executeQuery(sql);
         File file = new File("Class"+id);
         file.createNewFile();
@@ -30,6 +31,7 @@ public class FileLoader {
                 BigDecimal outgoingSaldoPassive = resultSet.getBigDecimal(7);
                 bw.write(number+"||"+incomingSaldoActive+"||"+incomingSaldoPassive+"||"+turnoverDebet+
                         "||"+turnoverCredit+"||"+outgoingSaldoActive+"||"+outgoingSaldoPassive+"||\n");
+                //Записываем строку в файл
             }
         } catch (IOException e) {
             e.printStackTrace();

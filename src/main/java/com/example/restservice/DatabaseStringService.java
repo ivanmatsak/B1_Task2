@@ -2,7 +2,7 @@ package com.example.restservice;
 
 import java.util.List;
 
-public interface DatabaseStringService {
+public interface DatabaseStringService {//интерфейс, который предоставляет абстрактные методы для получения нужной бд
     public abstract List<DatabaseString> getClass1Database();
     public abstract List<DatabaseString> getClass2Database();
     public abstract List<DatabaseString> getClass3Database();

@@ -2,9 +2,10 @@ package com.example.restservice;
 
 import java.math.BigDecimal;
 
-public class DatabaseString {
+public class DatabaseString {//Класс, который представляет из себя строку из таблицы бд
     private int id;
     private String number;
+    //Используем тип BigDecimal, потому что числа в бд большие, но при этом имеют знаки после запятой
     private BigDecimal incomingSaldoActive;
     private BigDecimal incomingSaldoPassive;
     private BigDecimal turnoverDebet;
@@ -25,7 +26,7 @@ public class DatabaseString {
                 ", OutgoingSaldoPassive=" + outgoingSaldoPassive +
                 '}';
     }
-
+    //Геттеры и сеттеры
     public int getId() {
         return id;
     }
