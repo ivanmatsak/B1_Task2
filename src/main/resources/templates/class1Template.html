@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <title>Excel to database</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <link rel="stylesheet" type="text/css" media="all"
+          href="../../css/gtvg.css" th:href="@{/css/gtvg.css}"/>
+    <style>
+        .nav li {
+  display:inline-block;
+}
+ul {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  background-color: #333;
+}
+
+li {
+  float: left;
+}
+
+li a {
+  display: block;
+  color: white;
+  text-align: center;
+  padding: 14px 16px;
+  text-decoration: none;
+}
+
+/* Change the link color to #111 (black) on hover */
+li a:hover {
+  background-color: #111;
+}
+table, th, td {
+  border: 1px solid;
+}
+    </style>
+</head>
+
+<body>
+
+<nav th:fragment="navbar" class="navbar navbar-expand-md bg-dark navbar-dark">
+    <div class="container-fluid">
+
+        <ul class="nav navbar-nav">
+            <li><a class="nav-link" th:href="@{/class1}">Class 1: Книга 1</a></li>
+
+            <li><a class="nav-link" th:href="@{/class2}">Class 2: Книга 2</a></li>
+
+            <li><a class="nav-link" th:href="@{/class3}">Class 3: Книга 3</a></li>
+
+            <li><a class="nav-link" th:href="@{/class4}">Class 4: Книга 4</a></li>
+            <li><a class="nav-link" th:href="@{/class5}">Class 5: Книга 5</a></li>
+            <li><a class="nav-link" th:href="@{/class6}">Class 6: Книга 6</a></li>
+            <li><a class="nav-link" th:href="@{/class7}">Class 7: Книга 7</a></li>
+            <li><a class="nav-link" th:href="@{/class8}">Class 8: Книга 8</a></li>
+            <li><a class="nav-link" th:href="@{/class9}">Class 9: Книга 9</a></li>
+            <li><a th:href="@{|/download?id=${id}|}">download</a></li>
+        </ul>
+    </div>
+</nav>
+
+
+<table id="example" class="table table-bordered" style="width: 100%">
+        <tr>
+            <th>Number</th>
+            <th>IncomingSaldoActive</th>
+            <th>IncomingSaldoPassive</th>
+            <th>TurnoverDebet</th>
+            <th>TurnoverCredit</th>
+            <th>OutgoingSaldoActive</th>
+            <th>OutgoingSaldoPassive</th>
+
+        </tr>
+        <tr th:each="string : ${strings}">
+            <td th:text="${string.number}">Number</td>
+            <td th:text="${string.incomingSaldoActive}">IncomingSaldoActive</td>
+            <td th:text="${string.incomingSaldoPassive}">IncomingSaldoPassive</td>
+            <td th:text="${string.turnoverDebet}">TurnoverDebet</td>
+            <td th:text="${string.turnoverCredit}">TurnoverCredit</td>
+            <td th:text="${string.outgoingSaldoActive}">OutgoingSaldoActive</td>
+            <td th:text="${string.outgoingSaldoPassive}">OutgoingSaldoPassive</td>
+        </tr>
+    </table>
+</body>
+
+</html>
